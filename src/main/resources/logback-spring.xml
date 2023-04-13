@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="application_name" source="spring.application.name"/>
+    <springProperty scope="context" name="active_profile" source="spring.profiles.active"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint}  %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- Log configuration for Docker profile -->
+    <springProfile name="!dev">
+        <appender name="flatConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>utf8</charset>
+            </encoder>
+        </appender>
+        <appender name="syslog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/deployments/logs/logs.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <!-- daily rollover -->
+                <fileNamePattern>/deployments/logs/logs.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <maxFileSize>5MB</maxFileSize>
+                <maxHistory>1</maxHistory>
+                <totalSizeCap>15MB</totalSizeCap>
+            </rollingPolicy>
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="syslog"/>
+            <appender-ref ref="flatConsoleAppender"/>
+        </root>
+    </springProfile>
+
+    <!-- Log configuration for dev profile -->
+    <springProfile name="dev">
+
+        <appender name="flatConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <charset>utf8</charset>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="flatConsoleAppender"/>
+        </root>
+    </springProfile>
+</configuration>

@@ -1,0 +1,57 @@
+spring:
+  main:
+    banner-mode: console
+  cloud:
+    config:
+      import-check:
+        enabled: false
+      enabled: false
+  application:
+    name: openshift-spring-workshop
+  jmx:
+    enabled: true
+  datasource:
+    hikari:
+      maximum-pool-size: 21
+    sql:
+      init:
+        platform: oracle
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: "/v3/api-docs"
+    groups:
+      enabled: false
+  show-actuator: false
+  auto-tag-classes: true
+  # In order to disable springdoc cache, you will have to set the following property:
+  cache:
+    disabled: true
+  writer-with-default-pretty-printer: false
+  use-fqn: true
+  swagger-ui:
+    path: "/swagger"
+    enabled: true
+    filter: false
+    # It can be 'alpha' (sort by paths alphanumerically), 'method' (sort by HTTP method)
+    # or a function (see Array.prototype.sort() to know how sort function works).
+    # Default is the order returned by the server unchanged.
+    operations-sorter: "method"
+    # Controls the display of operationId in operations list.
+    display-operation-id: false
+    # Controls the display of the request duration (in milliseconds) for "Try it out" requests.
+    display-request-duration: false
+    # If set to true, enables deep linking for tags and operations. See the [Deep Linking documentation](/docs/usage/deep-linking.md) for more information.
+    deep-linking: false # previous swagger value was true
+    # It can be 'list' (expands only the tags), 'full' (expands the tags and operations) or 'none' (expands nothing).
+    doc-expansion: "list"
+    # Controls the display of vendor extension (x-) fields and values for Operations, Parameters, and Schema.
+    show-extensions: false
+    syntax-highlight:
+      activated: false # https://stackoverflow.com/questions/64542716/springdoc-openapi-ui-unresponsive-when-large-response-is-returned-by-the-api
+    try-it-out-enabled: true
+swagger:
+  description: "API description of all restcontrollers for the backend."
+  license: "Apache 2.0"
+

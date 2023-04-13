@@ -1,0 +1,5 @@
+ext.cloudGcp = '2021.0.3'
+ext.jackson = '2.13.3'
+ext.lombok = '1.18.22'
+ext.logBackVersion = '1.2.9'
+ext.logstashVersion = '7.0.1'

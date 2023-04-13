@@ -1,0 +1,28 @@
+server:
+  port: 9031
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;MODE=MYSQL
+    username: sa
+    password: sa
+
+  jpa:
+
+    generate-ddl: false # do not initialize schema on startup
+    show-sql: false # print all the DB queries to the console
+
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+    properties:
+      hibernate:
+        max_fetch_depth: 3
+        dialect: org.hibernate.dialect.H2Dialect
+  main:
+    allow-bean-definition-overriding: false
+
+swagger:
+  title: "Template - Microservice Openshift spring workshop REST API"
+
