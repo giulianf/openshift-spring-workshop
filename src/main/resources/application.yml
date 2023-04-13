@@ -55,3 +55,160 @@ swagger:
   description: "API description of all restcontrollers for the backend."
   license: "Apache 2.0"
 
+management:
+  endpoint:
+
+    # returns ordinary application logs.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#log-file
+    logfile:
+      enabled: true # Whether to enable the logfile endpoint.
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+
+    # returns all available beans in our BeanFactory. Unlike /auditevents, it doesn't support filtering.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#beans
+    beans:
+      enabled: true # Whether to enable the beans endpoint.
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+
+    # The caches endpoint provides access to the application's caches.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#caches
+    caches:
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      enabled: true # Whether to enable the caches endpoint.
+
+    # formerly known as /autoconfig, builds a report of conditions around autoconfiguration.
+    # The conditions endpoint provides information about the evaluation of conditions on configuration and auto-configuration classes.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#conditions
+    conditions:
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      enabled: true # Whether to enable the conditions endpoint.
+
+    # allows us to fetch all @ConfigurationProperties beans.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#configprops
+    configprops:
+      enabled: true # Whether to enable the configprops endpoint.
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+
+    # returns the current environment properties. Additionally, we can retrieve single properties.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#env
+    env:
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      enabled: true
+      post:
+        enabled: true
+
+    # summarizes the health status of our application.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#health
+    health:
+      enabled: true # Whether to enable the health endpoint.
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      show-components: always # When to show components. If not specified the 'show-details' setting will be used.
+      show-details: always # default: never => When to show full health details.
+      status:
+        order: DOWN,OUT_OF_SERVICE,UP,UNKNOWN # => WComma-separated list of health statuses in order of severity.
+      probes:
+        enabled: true
+
+    # builds and returns a heap dump from the JVM used by our application.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#heapdump
+    heapdump:
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      enabled: true # Whether to enable the heapdump endpoint.
+
+    # enables us to query and modify the logging level of our application.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#loggers
+    loggers:
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      enabled: true # Whether to enable the loggers endpoint.
+
+    # The mappings endpoint provides information about the application?s request mappings.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#mappings
+    mappings:
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      enabled: true # Whether to enable the mappings endpoint.
+
+    # details metrics of our application. This might include generic metrics as well as custom ones.
+    # https://docs.spring.io/spring-boot/docs/current/actuator-api/htmlsingle/#metrics
+    metrics:
+      cache:
+        time-to-live: 0ms # Maximum time that a response can be cached.
+      enabled: true # Whether to enable the metrics endpoint.
+
+    prometheus:
+      enabled: true
+  endpoints:
+    enabled-by-default: true # Whether to enable or disable all endpoints by default.
+    web:
+      base-path: /actuator # Base path for Web endpoints. Relative to server.servlet.context-path or management.server.servlet.context-path if management.server.port is configured.
+      exposure:
+        #        include: health,prometheus,beans,endpoints
+        include: '*' # Endpoint IDs that should be included or '*' for all.
+    jmx:
+      exposure:
+        include: '*'
+      domain: ${spring.application.name}
+  health:
+    defaults:
+      enabled: true # Whether to enable default health indicators.
+    db:
+      enabled: true # Whether to enable database health check.
+    diskspace:
+      enabled: true # Whether to enable disk space health check.
+      threshold: 10MB # Minimum disk space that should be available.
+    ping:
+      enabled: true # Whether to enable ping health check.
+    jms:
+      enabled: true
+    refresh:
+      enabled: true
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  info:
+    build:
+      enabled: true # Whether to enable build info.
+    defaults:
+      enabled: true # Whether to enable default info contributors.
+    env:
+      enabled: true # Whether to enable environment info.
+    git:
+      enabled: true # Whether to enable git info.
+      mode: simple
+  metrics:
+    export:
+      jmx:
+        enabled: true # Whether exporting of metrics to JMX is enabled.
+        domain: metrics # default: metrics => Metrics JMX domain name.
+    web:
+      client:
+        request:
+          autotime:
+            enabled: true # Whether to automatically time web client requests.
+          metric-name: "http.client.requests" # Name of the metric for sent requests.
+        max-uri-tags: 100 # Maximum number of unique URI tag values allowed. After the max number of tag values is reached, metrics with additional tag values are denied by filter.
+      server:
+        max-uri-tags: 100 # Maximum number of unique URI tag values allowed. After the max number of tag values is reached, metrics with additional tag values are denied by filter.
+        request:
+          autotime:
+            enabled: true # Whether to automatically time web server requests.
+          metric-name: "http.server.requests" # => Name of the metric for received requests.
+  distribution:
+    percentiles-histogram:
+      http.server.requests: true
+  server:
+    add-application-context-header: false # default: false => Add the "X-Application-Context" HTTP header in each response.
+  trace:
+    http:
+      enabled: true # default: true => Whether to enable HTTP request-response tracing.
+      include: REQUEST_HEADERS,RESPONSE_HEADERS,TIME_TAKEN # Items to be included in the trace. Defaults to request headers (excluding Authorization but including Cookie), response headers (including Set-Cookie), and time taken.
